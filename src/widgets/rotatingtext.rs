@@ -2,6 +2,7 @@ use crate::config::Config;
 use crate::errors::*;
 use std::time::{Duration, Instant};
 use crate::widget::{I3BarWidget, State};
+use super::super::widget::Properties;
 use serde_json::value::Value;
 
 #[derive(Clone, Debug)]
@@ -14,7 +15,7 @@ pub struct RotatingTextWidget {
     content: String,
     icon: Option<String>,
     state: State,
-    rendered: Value,
+    rendered: Properties,
     cached_output: Option<String>,
     config: Config,
     pub rotating: bool,
@@ -32,13 +33,15 @@ impl RotatingTextWidget {
             content: String::new(),
             icon: None,
             state: State::Idle,
-            rendered: json!({
-                "full_text": "",
-                "separator": false,
-                "separator_block_width": 0,
-                "background": "#000000",
-                "color": "#000000"
-            }),
+            rendered: Properties {
+                icon: "".to_owned(),
+                full_text: "".to_owned(),
+                separator: false,
+                separator_block_width: 0,
+                background: "#000000".to_owned(),
+                color: "#000000".to_owned(),
+                markup: "".to_owned(),
+            },
             cached_output: None,
             config,
             rotating: false,
@@ -124,19 +127,14 @@ impl RotatingTextWidget {
     fn update(&mut self) {
         let (key_bg, key_fg) = self.state.theme_keys(&self.config.theme);
 
-        self.rendered = json!({
-            "full_text": format!("{}{} ",
-                                self.icon.clone().unwrap_or_else(|| String::from(" ")),
-                                self.get_rotated_content()),
-            "separator": false,
-            "separator_block_width": 0,
-            "min_width": if self.content == "" {"".to_string()} else {"0".repeat(self.width+5)},
-            "align": "left",
-            "background": key_bg,
-            "color": key_fg
-        });
+        self.rendered.icon = self.icon.clone().unwrap_or_else(|| String::from(" "));
+        self.rendered.full_text = self.get_rotated_content();
+        // self.rendered.min_width = if self.content == "" {"".to_string()} else {"0".repeat(self.width+5)},
+        // self.rendered.align = "left";
+        self.rendered.background = key_bg.to_owned();
+        self.rendered.color = key_fg.to_owned();
 
-        self.cached_output = Some(self.rendered.to_string());
+        // self.cached_output = Some(self.rendered.to_string());
     }
 
     pub fn next(&mut self) -> Result<(bool, Option<Duration>)> {
@@ -169,12 +167,11 @@ impl RotatingTextWidget {
 
 impl I3BarWidget for RotatingTextWidget {
     fn to_string(&self) -> String {
-        self.cached_output
-            .clone()
-            .unwrap_or_else(|| self.rendered.to_string())
+        format!("{}{} ", self.icon.clone().unwrap_or_else(|| String::from(" ")),
+                         self.get_rotated_content())
     }
 
-    fn get_rendered(&self) -> &Value {
+    fn get_rendered(&self) -> &Properties {
         &self.rendered
     }
 }

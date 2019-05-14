@@ -2,6 +2,7 @@ use crate::config::Config;
 use crate::widget::State;
 use serde_json::value::Value;
 use super::super::widget::I3BarWidget;
+use super::super::widget::Properties;
 use num::{clamp, ToPrimitive};
 
 #[derive(Clone, Debug)]
@@ -9,7 +10,7 @@ pub struct GraphWidget {
     content: Option<String>,
     icon: Option<String>,
     state: State,
-    rendered: Value,
+    rendered: Properties,
     cached_output: Option<String>,
     config: Config,
 }
@@ -20,13 +21,15 @@ impl GraphWidget {
             content: None,
             icon: None,
             state: State::Idle,
-            rendered: json!({
-                "full_text": "",
-                "separator": false,
-                "separator_block_width": 0,
-                "background": "#000000",
-                "color": "#000000"
-            }),
+            rendered: Properties {
+                icon: "".to_owned(),
+                full_text: "".to_owned(),
+                separator: false,
+                separator_block_width: 0,
+                background: "#000000".to_owned(),
+                color: "#000000".to_owned(),
+                markup: "".to_owned(),
+            },
             config,
             cached_output: None,
         }
@@ -91,28 +94,22 @@ impl GraphWidget {
     fn update(&mut self) {
         let (key_bg, key_fg) = self.state.theme_keys(&self.config.theme);
 
-        self.rendered = json!({
-            "full_text": format!("{}{} ",
-                                self.icon.clone().unwrap_or_else(|| String::from(" ")),
-                                self.content.clone().unwrap_or_else(|| String::from(""))),
-            "separator": false,
-            "separator_block_width": 0,
-            "background": key_bg.to_owned(),
-            "color": key_fg.to_owned()
-        });
+        self.rendered.full_text = self.content.clone().unwrap_or_else(|| String::from(""));
+        self.rendered.icon = self.icon.clone().unwrap_or_else(|| String::from(" "));
+        self.rendered.background = key_bg.to_owned();
+        self.rendered.color = key_fg.to_owned();
 
-        self.cached_output = Some(self.rendered.to_string());
+        // self.cached_output = Some(self.rendered.to_string());
     }
 }
 
 impl I3BarWidget for GraphWidget {
     fn to_string(&self) -> String {
-        self.cached_output
-            .clone()
-            .unwrap_or_else(|| self.rendered.to_string())
+        format!("{}{} ",    self.icon.clone().unwrap_or_else(|| String::from(" ")),
+                            self.content.clone().unwrap_or_else(|| String::from("")))
     }
 
-    fn get_rendered(&self) -> &Value {
+    fn get_rendered(&self) -> &Properties {
         &self.rendered
     }
 }

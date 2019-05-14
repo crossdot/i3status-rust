@@ -1,6 +1,17 @@
 use crate::themes::Theme;
 use serde_json::value::Value;
 
+#[derive(Debug, Clone)]
+pub struct Properties {
+    pub icon: String,
+    pub full_text: String,
+    pub separator: bool,
+    pub separator_block_width: usize,
+    pub background: String,
+    pub color: String,
+    pub markup: String,
+}
+
 #[derive(Debug, Copy, Clone)]
 pub enum State {
     Idle,
@@ -25,5 +36,5 @@ impl State {
 
 pub trait I3BarWidget {
     fn to_string(&self) -> String;
-    fn get_rendered(&self) -> &Value;
+    fn get_rendered(&self) -> &Properties;
 }

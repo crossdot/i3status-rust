@@ -116,10 +116,7 @@ fn main() {
             .with_state(State::Critical)
             .with_text(&format!("{:?}", error));
         let error_rendered = error_widget.get_rendered();
-        println!(
-            "{}",
-            serde_json::to_string(&[error_rendered]).expect("failed to serialize error message")
-        );
+        // println!("{}", serde_json::to_string(&[error_rendered]).expect("failed to serialize error message"));
 
         eprintln!("\n\n{:?}", error);
         // Do nothing, so the error message keeps displayed

@@ -2,6 +2,7 @@ use crate::config::Config;
 use crate::widget::State;
 use serde_json::value::Value;
 use super::super::widget::I3BarWidget;
+use super::super::widget::Properties;
 
 #[derive(Clone, Debug)]
 pub struct ButtonWidget {
@@ -9,7 +10,7 @@ pub struct ButtonWidget {
     icon: Option<String>,
     state: State,
     id: String,
-    rendered: Value,
+    rendered: Properties,
     cached_output: Option<String>,
     config: Config,
 }
@@ -21,14 +22,15 @@ impl ButtonWidget {
             icon: None,
             state: State::Idle,
             id: String::from(id),
-            rendered: json!({
-                "full_text": "",
-                "separator": false,
-                "separator_block_width": 0,
-                "background": "#000000",
-                "color": "#000000",
-                "markup": "pango"
-            }),
+            rendered: Properties {
+                icon: "".to_owned(),
+                full_text: "".to_owned(),
+                separator: false,
+                separator_block_width: 0,
+                background: "#000000".to_owned(),
+                color: "#000000".to_owned(),
+                markup: "pango".to_owned(),
+            },
             config,
             cached_output: None,
         }
@@ -76,30 +78,19 @@ impl ButtonWidget {
     fn update(&mut self) {
         let (key_bg, key_fg) = self.state.theme_keys(&self.config.theme);
 
-        self.rendered = json!({
-            "full_text": format!("{}{} ",
-                                self.icon.clone().unwrap_or_else(|| String::from(" ")),
-                                self.content.clone().unwrap_or_else(|| String::from(""))),
-            "separator": false,
-            "name": self.id.clone(),
-            "separator_block_width": 0,
-            "background": key_bg,
-            "color": key_fg,
-            "markup": "pango"
-        });
+        self.rendered.full_text = self.content.clone().unwrap_or_else(|| String::from(""));
+        self.rendered.icon = self.icon.clone().unwrap_or_else(|| String::from(" "));
 
-        self.cached_output = Some(self.rendered.to_string());
+        // self.cached_output = Some(self.rendered.to_string());
     }
 }
 
 impl I3BarWidget for ButtonWidget {
     fn to_string(&self) -> String {
-        self.cached_output
-            .clone()
-            .unwrap_or_else(|| self.rendered.to_string())
+        format!("<fn=1>{}</fn> {}", self.rendered.icon, self.rendered.full_text)
     }
 
-    fn get_rendered(&self) -> &Value {
+    fn get_rendered(&self) -> &Properties {
         &self.rendered
     }
 }
