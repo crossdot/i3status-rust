@@ -1,6 +1,5 @@
 use crate::config::Config;
 use crate::widget::State;
-use serde_json::value::Value;
 use super::super::widget::I3BarWidget;
 use super::super::widget::Properties;
 
@@ -72,8 +71,8 @@ impl TextWidget {
 
         self.rendered.icon = self.icon.clone().unwrap_or_else(|| String::from(" "));
         self.rendered.full_text = self.content.clone().unwrap_or_else(|| String::from(""));
-        self.rendered.background = key_bg.to_owned();
         self.rendered.color = key_fg.to_owned();
+        self.rendered.background = key_bg.to_owned();
 
         // self.cached_output = Some(self.rendered.to_string());
     }
@@ -81,7 +80,14 @@ impl TextWidget {
 
 impl I3BarWidget for TextWidget {
     fn to_string(&self) -> String {
-        format!("{}{} ", self.icon.clone().unwrap_or_else(|| String::from(" ")), self.content.clone().unwrap_or_else(|| String::from("")))
+        // format!("{}{} ", self.icon.clone().unwrap_or_else(|| String::from(" ")), self.content.clone().unwrap_or_else(|| String::from("")))
+
+        format!("<fc={},{}><fn=1>{}</fn> {}</fc>", 
+            self.rendered.color[..7].to_owned(),
+            self.rendered.background[..7].to_owned(),
+            self.rendered.icon,
+            self.rendered.full_text
+        )
     }
 
     fn get_rendered(&self) -> &Properties {

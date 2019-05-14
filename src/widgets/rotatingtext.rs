@@ -3,7 +3,6 @@ use crate::errors::*;
 use std::time::{Duration, Instant};
 use crate::widget::{I3BarWidget, State};
 use super::super::widget::Properties;
-use serde_json::value::Value;
 
 #[derive(Clone, Debug)]
 pub struct RotatingTextWidget {
@@ -131,8 +130,8 @@ impl RotatingTextWidget {
         self.rendered.full_text = self.get_rotated_content();
         // self.rendered.min_width = if self.content == "" {"".to_string()} else {"0".repeat(self.width+5)},
         // self.rendered.align = "left";
-        self.rendered.background = key_bg.to_owned();
         self.rendered.color = key_fg.to_owned();
+        self.rendered.background = key_bg.to_owned();
 
         // self.cached_output = Some(self.rendered.to_string());
     }
@@ -167,8 +166,15 @@ impl RotatingTextWidget {
 
 impl I3BarWidget for RotatingTextWidget {
     fn to_string(&self) -> String {
-        format!("{}{} ", self.icon.clone().unwrap_or_else(|| String::from(" ")),
-                         self.get_rotated_content())
+        // format!("{}{} ", self.icon.clone().unwrap_or_else(|| String::from(" ")),
+                        //  self.get_rotated_content())
+    
+        format!("<fc={},{}><fn=1>{}</fn> {}</fc>", 
+            self.rendered.color[..7].to_owned(),
+            self.rendered.background[..7].to_owned(),
+            self.rendered.icon,
+            self.rendered.full_text
+        )
     }
 
     fn get_rendered(&self) -> &Properties {
