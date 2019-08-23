@@ -82,7 +82,7 @@ impl I3BarWidget for TextWidget {
     fn to_string(&self) -> String {
         // format!("{}{} ", self.icon.clone().unwrap_or_else(|| String::from(" ")), self.content.clone().unwrap_or_else(|| String::from("")))
 
-        format!("<fc={},{}><fn=1>{}</fn> {}</fc>", 
+        format!("<fc={},{}><fn=1>{}</fn>{}</fc>",
             self.rendered.color[..7].to_owned(),
             self.rendered.background[..7].to_owned(),
             self.rendered.icon,

@@ -121,7 +121,7 @@ pub fn print_blocks(order: &[String], block_map: &HashMap<String, &mut dyn Block
         if widgets.is_empty() {
             continue;
         }
-        let first = widgets[0];
+//        let first = widgets[0];
         // let color = first.get_rendered()["background"]
             // .as_str()
             // .internal_error("util", "couldn't get background color")?;
@@ -141,20 +141,22 @@ pub fn print_blocks(order: &[String], block_map: &HashMap<String, &mut dyn Block
         // let separator = json!(config.theme.separator);
         // print!("{}{},", if state.has_predecessor { "," } else { "" },
             //    separator.to_string());
-        print!("{}", first.to_string());
+//        print!("{}", first.to_string());
         // state.set_last_bg(color.to_owned());
-        state.set_predecessor(true);
-
-        for widget in widgets.iter().skip(1) {
-            print!("{}{}", if state.has_predecessor { "," } else { "" },
-                   widget.to_string());
+        // state.set_predecessor(true);
+//        for widget in widgets.iter().skip(1) {
+//            print!("");
+            // print!("{}{}", if state.has_predecessor { "," } else { "" }, widget.to_string());
             // state.set_last_bg(String::from(
             //     widget.get_rendered()["background"]
             //         .as_str()
             //         .internal_error("util", "couldn't get background color")?,
             // ));
-            state.set_predecessor(true);
-        }
+            // state.set_predecessor(true);
+//        }
+
+//        print!("{}", widgets.iter().map(|w| w.to_string()).collect::<Vec<_>>().join(","));
+        print!(" {}", widgets.iter().map(|w| w.to_string()).collect::<Vec<_>>().join(""));
     }
     // println!("],");
     println!("");

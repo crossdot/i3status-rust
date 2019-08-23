@@ -90,7 +90,7 @@ impl I3BarWidget for ButtonWidget {
     fn to_string(&self) -> String {
         let (key_bg, key_fg) = self.state.theme_keys(&self.config.theme);
 
-        format!("<fc={},{}><fn=1>{}</fn> {}</fc>", 
+        format!("<fc={},{}><fn=1>{}</fn>{}</fc>",
             self.rendered.color[..7].to_owned(),
             self.rendered.background[..7].to_owned(),
             self.rendered.icon,
