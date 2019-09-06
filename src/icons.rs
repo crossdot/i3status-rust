@@ -22,6 +22,7 @@ lazy_static! {
         "toggle_on" => " ON ",
         "volume_full" => " VOL ",
         "volume_half" => " VOL ",
+        "volume_loudly" => " VOL ",
         "volume_empty" => " VOL ",
         // This icon has no spaces around it because it is manually set as text. (sound.rs)
         "volume_muted" => "MUTED",
@@ -76,6 +77,7 @@ lazy_static! {
         "toggle_on" => " \u{f205} ",
         "volume_full" => " \u{f028} ",
         "volume_half" => " \u{f027} ",
+        "volume_loudly" => " \u{f027} ",
         "volume_empty" => " \u{f026} ",
         // This icon has no spaces around it because it is manually set as text. (sound.rs)
         "volume_muted" => "\u{f00d}",
@@ -132,6 +134,7 @@ lazy_static! {
         "toggle_on" => " \u{f205} ",
         "volume_full" => " \u{f028} ",
         "volume_half" => " \u{f027} ",
+        "volume_loudly" => " \u{f6a8} ",
         "volume_empty" => " \u{f026} ",
         // This icon has no spaces around it because it is manually set as text. (sound.rs)
         "volume_muted" => "\u{f2e2}",
@@ -188,6 +191,7 @@ lazy_static! {
         "toggle_on" => " \u{e837} ",
         "volume_full" => " \u{e050} ",
         "volume_half" => " \u{e04d} ",
+        "volume_loudly" => " \u{e04d} ",
         "volume_empty" => " \u{e04e} ",
         // This icon has no spaces around it because it is manually set as text. (sound.rs)
         "volume_muted" => "\u{e04f}",

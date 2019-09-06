@@ -602,7 +602,8 @@ impl Sound {
         } else {
             self.text.set_icon(match volume {
                 0..=20 => "volume_empty",
-                21..=70 => "volume_half",
+                21..=50 => "volume_half",
+                51..=75 => "volume_loudly",
                 _ => "volume_full",
             });
             self.text.set_text(format!("{:02}%", volume));
