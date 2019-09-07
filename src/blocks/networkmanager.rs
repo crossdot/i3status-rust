@@ -11,7 +11,9 @@ use crate::scheduler::Task;
 use crate::block::{Block, ConfigBlock};
 use crate::widget::{I3BarWidget, State};
 use crate::widgets::text::TextWidget;
-use crate::blocks::dbus::{BusType, Connection, Message, MessageItem};
+use dbus::{Message};
+use dbus::arg::messageitem::{MessageItem};
+use dbus::ffidisp::{BusType, Connection};
 use crate::blocks::dbus::arg::Variant;
 
 enum NetworkState {

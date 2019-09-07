@@ -15,8 +15,9 @@ use crate::widgets::rotatingtext::RotatingTextWidget;
 use crate::widgets::button::ButtonWidget;
 use crate::widget::{I3BarWidget, State};
 
-use crate::blocks::dbus::{arg, stdintf, BusType, Connection, ConnectionItem, Message};
-use crate::blocks::dbus::arg::{Array, RefArg};
+use dbus::ffidisp::{stdintf, BusType, Connection, ConnectionItem};
+use dbus::{arg, Message};
+use dbus::arg::{Array, RefArg};
 use self::stdintf::org_freedesktop_dbus::Properties;
 use uuid::Uuid;
 

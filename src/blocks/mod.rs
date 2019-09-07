@@ -59,7 +59,7 @@ use super::block::{Block, ConfigBlock};
 use crate::errors::*;
 use super::scheduler::Task;
 
-extern crate dbus;
+pub use dbus;
 
 use serde::de::Deserialize;
 use crossbeam_channel::Sender;

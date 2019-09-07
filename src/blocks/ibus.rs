@@ -10,8 +10,9 @@ use regex::Regex;
 use uuid::Uuid;
 
 use crate::block::{Block, ConfigBlock};
-use crate::blocks::dbus::stdintf::org_freedesktop_dbus::Properties;
-use crate::blocks::dbus::{arg, Connection, ConnectionItem};
+use dbus::ffidisp::stdintf::org_freedesktop_dbus::Properties;
+use dbus::ffidisp::{Connection, ConnectionItem};
+use dbus::{arg};
 use crate::config::Config;
 use crate::errors::*;
 use crate::input::I3BarEvent;
