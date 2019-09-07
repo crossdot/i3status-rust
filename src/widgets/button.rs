@@ -90,7 +90,12 @@ impl I3BarWidget for ButtonWidget {
     fn to_string(&self) -> String {
         let (key_bg, key_fg) = self.state.theme_keys(&self.config.theme);
 
-        format!("<fc={},{}><fn=1>{}</fn>{}</fc>",
+        format!("<action=`source ~/.profile ; NAME={} mouse.sh` button=1><action=`source ~/.profile ; BUTTON=2 NAME={} mouse.sh` button=2><action=`source ~/.profile ; BUTTON=3 NAME={} mouse.sh` button=3><action=`source ~/.profile ; BUTTON=4 NAME={} mouse.sh` button=4><action=`source ~/.profile ; BUTTON=5 NAME={} mouse.sh` button=5><fc={},{}><fn=1>{}</fn>{}</fc></action></action></action></action></action>",
+            self.id.to_owned(),
+            self.id.to_owned(),
+            self.id.to_owned(),
+            self.id.to_owned(),
+            self.id.to_owned(),
             self.rendered.color[..7].to_owned(),
             self.rendered.background[..7].to_owned(),
             self.rendered.icon,
