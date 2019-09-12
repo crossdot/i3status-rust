@@ -121,8 +121,8 @@ impl StdError for Error {
 }
 
 impl<T> From<::crossbeam_channel::SendError<T>> for Error
-where
-    T: Send,
+    where
+        T: Send,
 {
     fn from(_err: ::crossbeam_channel::SendError<T>) -> Error {
         InternalError(
@@ -130,5 +130,17 @@ where
             format!("send error"),
             None,
         )
+    }
+}
+
+impl From<::config::ConfigError> for Error {
+    fn from(err: ::config::ConfigError) -> Error {
+        ConfigurationError(err.description().to_owned(), (format!("{}", err), format!("{:?}", err)))
+    }
+}
+
+impl From<::notify::Error> for Error {
+    fn from(err: ::notify::Error) -> Error {
+        ConfigurationError(err.description().to_owned(), (format!("{}", err), format!("{:?}", err)))
     }
 }

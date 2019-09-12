@@ -46,3 +46,6 @@ block = "sound"
 block = "time"
 interval = 10
 format = "%a %d/%m %R"
+
+
+

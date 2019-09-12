@@ -18,6 +18,7 @@ extern crate chrono;
 extern crate chrono_tz;
 #[cfg(feature = "pulseaudio")]
 extern crate libpulse_binding as pulse;
+//extern crate config as Cfg;
 
 #[macro_use]
 mod de;
@@ -126,13 +127,40 @@ fn main() {
     }
 }
 
+lazy_static! {
+    static ref CONFIG: RwLock<Config> = RwLock::new({
+        Config::default()
+    });
+}
+
+use notify::{RecommendedWatcher, Watcher, RecursiveMode};
+use std::sync::RwLock;
+use std::sync::mpsc::channel;
+use ::config::ConfigError;
+fn get_config(path: &str) -> ::std::result::Result<Config, ConfigError> {
+    let mut s = ::config::Config::new();
+    s.merge(::config::File::with_name(path))?;
+    s.try_into()
+}
+
 #[allow(unused_mut)] // TODO: Remove when fixed in chan_select
 fn run(matches: &ArgMatches) -> Result<()> {
     // Now we can start to run the i3bar protocol
     print!("{{\"version\": 1, \"click_events\": true}}\n[");
 
+    let path = matches.value_of("config").unwrap();
+    let (tx_config_changes, rx_config_changes) = crossbeam_channel::unbounded();
     // Read & parse the config file
-    let config: Config = deserialize_file(matches.value_of("config").unwrap())?;
+    let config: Config = get_config(path)?;
+
+    // Automatically select the best implementation for your platform.
+    // You can also access each implementation directly e.g. INotifyWatcher.
+    let mut watcher: RecommendedWatcher = Watcher::new(tx_config_changes, Duration::from_secs(2))?;
+    // Add a path to be watched. All files and directories at that path and
+    // below will be monitored for changes.
+    watcher
+        .watch(path, RecursiveMode::NonRecursive)
+        .unwrap();
 
     // Update request channel
     let (tx_update_requests, rx_update_requests): (Sender<Task>, Receiver<Task>) = crossbeam_channel::unbounded();
@@ -233,6 +261,9 @@ fn run(matches: &ArgMatches) -> Result<()> {
                 scheduler.do_scheduled_updates(&mut block_map)?;
                 // redraw the blocks, state changed
                 util::print_blocks(&order, &block_map, &config)?;
+            },
+            // Receive config change
+            recv(rx_config_changes) -> _ => {
             },
         }
 
